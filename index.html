@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Students at Hogwarts 1991</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Merienda"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="students.css" />
+  </head>
+
+  <body>
+    <section id="modal">
+      <button>Luk</button>
+      <div id="modal-content">
+        <h2 class="modal-navn"></h2>
+        <p class="modal-house"></p>
+        <img class="modal-billede" src="" alt="" />
+      </div>
+    </section>
+
+    <header>
+      <h1>Students of Hogwarts</h1>
+      <div class="banner" id="myBanner">
+        <a href="index.html">All students</a>
+
+        <a href="#gryffindor" class="house-item" data-house="Gryffindor"
+          >Gryffindor</a
+        >
+        <a href="#hufflepuff" class="house-item" data-house="Hufflepuff"
+          >Hufflepuff</a
+        >
+        <a href="#ravenclaw" class="house-item" data-house="Ravenclaw"
+          >Ravenclaw</a
+        >
+        <a href="#slytherin" class="house-item" data-house="Slytherin"
+          >Slytherin</a
+        >
+
+        <a href="javascript:void(0);" class="icon" onclick="bannerFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="data-container"></section>
+    </main>
+    <template class="data-template">
+      <article class="students">
+        <img class="data-billede" src="" alt="" />
+        <br />
+
+        <div class="data-name"></div>
+        <br />
+
+        <div class="data-house"></div>
+        <br />
+      </article>
+    </template>
+
+    <script src="students.js"></script>
+  </body>
+</html>
