@@ -1,33 +1,11 @@
 /* COUNTER */
 
-#hufflepuff_counter::before {
-  content: "Hufflepuff: ";
-  padding: 0 0.5rem 0;
+#expelled_counter {
   color: white;
+  font-size: 2em;
 }
-
-#gryffindor_counter::before {
-  content: "Gryffindor: ";
-  padding: 0 0.5rem 0;
-  color: white;
-}
-
-#ravenclaw_counter::before {
-  content: "Ravenclaw: ";
-  padding: 0 0.5rem 0;
-  color: white;
-}
-
-#slytherin_counter::before {
-  content: "Slytherin: ";
-  padding: 0 0.5rem 0;
-  color: white;
-}
-
 #expelled_counter::before {
   content: "Expelled students: ";
-  padding: 0 0.5rem 0;
-  color: white;
 }
 
 body {
@@ -221,5 +199,3 @@ template {
   position: relative;
   left: 20%;
 }
-
-

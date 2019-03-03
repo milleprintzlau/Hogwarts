@@ -154,7 +154,6 @@ function setMuggleBloods() {
 
 function corrrectNames() {
   arrayOfStudents.forEach(student => {
-    // Bloodhack is here!
     if (
       student.bloodstatus === "Halfblood" ||
       student.bloodstatus === "Muggleblood"
@@ -205,7 +204,7 @@ function makeId(input) {
 
 //ERXPEL STUDENT
 function expelStudent(badStudentId) {
-  //Expel status is true
+  //PLUG IN HACKING HERE
 
   let objIndex = arrayOfStudents.findIndex(obj => obj.id === badStudentId);
   arrayOfStudents[objIndex].Expelled = true;
@@ -223,8 +222,6 @@ function expelStudent(badStudentId) {
 //JOIN InSq
 
 function joinInSq(StudentId) {
-  console.log("joinInSq");
-
   let objIndex = arrayOfStudents.findIndex(obj => obj.id === StudentId);
   let inSquadStudent = arrayOfStudents[objIndex];
 
@@ -233,25 +230,13 @@ function joinInSq(StudentId) {
     (inSquadStudent.bloodstatus === "Halfblood" &&
       inSquadStudent.house === "Slytherin")
   ) {
-    arrayOfStudents[objIndex].inSquad = true;
+    arrayOfStudents[objIndex].inSquad = false;
     arrayOfInSquad.unshift(inSquadStudent);
     activeArray = arrayOfStudents;
     filterStudents();
   } else {
-    alert("No can do!");
+    alert("You shall not pass!");
   }
-}
-
-//EXIT InSq
-function exitInSq(StudentId) {
-  console.log("exitInSq");
-
-  let objIndex = arrayOfStudents.findIndex(obj => obj.id === StudentId);
-  let inSquadStudent = arrayOfStudents[objIndex];
-  arrayOfInSquad.splice(inSquadStudent);
-  arrayOfStudents[objIndex].inSquad = false;
-  activeArray = arrayOfStudents;
-  filterStudents();
 }
 
 //EXPEL KNAPPEN
@@ -260,8 +245,6 @@ function ExpelledButton() {
 
   housefilter = "All";
   document.querySelector("#Expelled").classList.add("on");
-  document.querySelector("#Enrolled").classList.remove("on");
-  document.querySelector("#Enrolled").classList.add("off");
 
   filterStudents();
 }
@@ -281,33 +264,35 @@ function filterAll() {
 
 //Filter for hufflepuff
 function filterHufflepuff() {
-  housefilter = "hufflepuff";
+  housefilter = "Hufflepuff";
   filterStudents();
 }
 
 //Filter for gryffindor
 function filterGryffindor() {
-  housefilter = "gryffindor";
+  housefilter = "Gryffindor";
 
   filterStudents();
 }
 
 //Filter for ravenclaw
 function filterRavenclaw() {
-  housefilter = "ravenclaw";
+  housefilter = "Ravenclaw";
 
   filterStudents();
 }
 
 //Filter for slytherin
 function filterSlytherin() {
-  housefilter = "slytherin";
+  housefilter = "Slytherin";
 
   filterStudents();
 }
 
 //Array for filtering students to the Housefilter.
 function filterStudents() {
+  console.log(housefilter);
+  console.log(arrayOfStudents);
   if (showexpelled == false) {
     if (housefilter === "All") {
       sortStudents(arrayOfStudents);
@@ -317,6 +302,7 @@ function filterStudents() {
       });
       sortStudents();
     }
+    console.log(activeArray);
   }
 }
 
@@ -383,10 +369,8 @@ function displayStudents() {
   container.innerHTML = "";
 
   //forEach
-
+  console.log(activeArray);
   activeArray.forEach(student => {
-    console.log(student);
-
     //Creating the klon
     let klon = template.cloneNode(true).content;
 
@@ -435,8 +419,6 @@ function visModal(person) {
   modal.querySelector(".modal-navn").textContent = person.fullname;
 
   modal.querySelector(".modal-billede").src = "images/" + person.image;
-
-  // Virker ikke!!!!
 
   if (person.house == "Gryffindor") {
     document.querySelector("#modal-content").classList.add("gryffindor");
