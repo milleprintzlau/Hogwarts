@@ -10,7 +10,6 @@ let activeArray;
 let housefilter = "All";
 let sortBy = "None";
 let activeId;
-let thisBloodList;
 
 let Hack = document.querySelector("#Hack");
 
@@ -25,7 +24,7 @@ const studentPrototype = {
   fullname: "-student name-",
   Firstname: "-student Firstname-",
   Lastname: "-student Firstname-",
-  House: "-student House-",
+  house: "-student house-",
   image: "-image-",
   Expelled: "-Expelled-",
   bloodstatus: "-bloodstatus-",
@@ -39,11 +38,11 @@ const studentPrototype = {
     this.fullname = studentData.fullname;
     this.Firstname = studentData.fullname.substring(0, firstSpace);
     this.Lastname = studentData.fullname.substring(lastSpace + 1);
-    this.House = studentData.House;
+    this.house = studentData.house;
     this.image = this.Lastname + "_" + this.Firstname.substring(0, 1) + ".png";
 
     this.Expelled = false;
-    this.bloodstatus = this.Lastname;
+    this.bloodstatus = "none";
     this.inSquad = false;
   }
 };
@@ -92,41 +91,9 @@ async function getJson() {
 }
 //	get JSON with the blood families
 async function getJsonFam(students) {
-  console.log("getJsonFam");
   let JsonFam = await fetch("http://petlatkea.dk/2019/hogwarts/families.json");
   let families = await JsonFam.json();
   studentObject(students, families);
-  checkBloodStatus(lastname);
-}
-
-function checkBloodStatus(lastname) {
-  let pureBlood;
-  let halfBlood;
-  let muggleBlood;
-
-  if (lastname === "Wienberg") {
-    pureBlood = "Pure";
-  }
-
-  thisBloodList.pure.forEach(student => {
-    if (student === lastname) {
-      let randomNumber = Math.random();
-      if (randomNumber < 0.49) {
-        pureBlood = "Muggle";
-      } else {
-        pureBlood = "Half";
-      }
-    } else {
-      muggleBlood = "Pure";
-    }
-  });
-
-  thisBloodList.half.forEach(student => {
-    if (student === lastname) {
-      halfBlood = "Pure";
-    }
-  });
-  return pureBlood || halfBlood || muggleBlood;
 }
 
 // StudentObject - the beginning of the sorting of Firstname - Lastname - Houses.
@@ -140,10 +107,70 @@ function studentObject(students, families) {
     arrayOfStudents.push(student);
   });
 
+  getHalfBloods(families);
+  getPureBloods(families);
+  setMuggleBloods();
+  corrrectNames();
+
   activeArray = arrayOfStudents;
-  addIdToStudents();
 
   createMille();
+}
+
+function getHalfBloods(families) {
+  console.log("getHalfBloods");
+  let halfBloods = families.half;
+  let bloodLabel = "Halfblood";
+  halfBloods.forEach(bloodName => {
+    setBloodStatus(bloodName, bloodLabel);
+  });
+}
+
+function getPureBloods(families) {
+  console.log("getPureBloods");
+  let pureBloods = families.pure;
+  let bloodLabel = "Pureblood";
+  pureBloods.forEach(bloodName => {
+    setBloodStatus(bloodName, bloodLabel);
+  });
+}
+
+function setBloodStatus(bloodName, bloodLabel) {
+  console.log("setBloodStatus");
+  let objIndex = arrayOfStudents.findIndex(obj => obj.lastName == bloodName);
+  if (objIndex !== -1) {
+    arrayOfStudents[objIndex].bloodstatus = bloodLabel;
+  }
+}
+
+function setMuggleBloods() {
+  console.log("setMuggleBloods");
+  arrayOfStudents.forEach(student => {
+    if (student.bloodstatus === "None") {
+      student.bloodstatus = "Muggleblood";
+    }
+  });
+}
+
+function corrrectNames() {
+  arrayOfStudents.forEach(student => {
+    // Bloodhack is here!
+    if (
+      student.bloodstatus === "Halfblood" ||
+      student.bloodstatus === "Muggleblood"
+    ) {
+      student.bloodstatus = "Pureblood";
+    } else {
+      let randomStuff = Math.random();
+      if (randomStuff > 0.5) {
+        student.bloodstatus = "Half-blood";
+      } else {
+        student.bloodstatus = "Muggleblood";
+      }
+    }
+  });
+  activeArray = arrayOfStudents;
+  addIdToStudents();
 }
 
 //Plugin of myself.
@@ -173,9 +200,10 @@ function makeId(input) {
   for (let i = 0; i < input.length; i++) {
     idMade += input[i].charCodeAt(0);
   }
-  return idMade.substring(0, 7);
+  return idMade;
 }
 
+//ERXPEL STUDENT
 function expelStudent(badStudentId) {
   //Expel status is true
 
@@ -191,6 +219,8 @@ function expelStudent(badStudentId) {
   activeArray = arrayOfStudents;
   filterStudents();
 }
+
+//JOIN InSq
 
 function joinInSq(StudentId) {
   console.log("joinInSq");
@@ -208,10 +238,11 @@ function joinInSq(StudentId) {
     activeArray = arrayOfStudents;
     filterStudents();
   } else {
-    alert("No!");
+    alert("No can do!");
   }
 }
 
+//EXIT InSq
 function exitInSq(StudentId) {
   console.log("exitInSq");
 
@@ -223,17 +254,7 @@ function exitInSq(StudentId) {
   filterStudents();
 }
 
-// function EnrolledButton() {
-//   console.log("EnrolledButton");
-//   activeArray = arrayOfStudents;
-
-//   housefilter = "All";
-//   document.querySelector("#Enrolled").classList.remove("off");
-//   document.querySelector("#Expelled").classList.remove("on");
-//   document.querySelector("#Expelled").classList.add("off");
-//   filterStudents();
-// }
-
+//EXPEL KNAPPEN
 function ExpelledButton() {
   activeArray = arrayOfExpelled;
 
@@ -292,7 +313,7 @@ function filterStudents() {
       sortStudents(arrayOfStudents);
     } else {
       activeArray = arrayOfStudents.filter(function(student) {
-        return student.House === housefilter;
+        return student.house === housefilter;
       });
       sortStudents();
     }
@@ -310,7 +331,7 @@ function sortByLastname() {
 }
 
 function sortByHouse() {
-  sortBy = "House";
+  sortBy = "house";
   sortStudents();
 }
 
@@ -341,7 +362,7 @@ function sortStudents() {
   }
   if (sortBy === "House") {
     activeArray.sort(function(a, b) {
-      if (a.House < b.House) {
+      if (a.house < b.house) {
         return -1;
       } else {
         return 1;
@@ -409,8 +430,7 @@ function visModal(person) {
 
   modal.querySelector(".modal-house").textContent = person.house;
 
-  modal.querySelector("[data-modalbloodstatus]").textContent =
-    person.bloodstatus;
+  modal.querySelector(".bloodstatus").textContent = person.bloodstatus;
 
   modal.querySelector(".modal-navn").textContent = person.fullname;
 
